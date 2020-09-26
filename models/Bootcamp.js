@@ -1,18 +1,19 @@
 const mongoose = require('mongoose');
+const slugify = require('slugify');
 
 const BootcampSchema = new mongoose.Schema({
   name: {
     type: String,
-    required: [true, 'Please add a name.'],
+    required: [true, 'Please add a name'],
     unique: true,
     trim: true,
-    maxlength: [50, 'Name can not be more than 50 charcters.'],
+    maxlength: [50, 'Name can not be more than 50 charcters'],
   },
   slug: String, // include bootcamp name for url: Node.JS Bootcamp => nodejs-bootcamp (slug) AND use a middleware
   description: {
     type: String,
-    required: [true, 'Please add a description.'],
-    maxlength: [500, 'Description can not be more than 50 charcters.'],
+    required: [true, 'Please add a description'],
+    maxlength: [500, 'Description can not be more than 50 charcters'],
   },
   website: {
     type: String,
@@ -23,18 +24,18 @@ const BootcampSchema = new mongoose.Schema({
   },
   phone: {
     type: String,
-    maxlength: [20, 'Phone number can not be longer than 20 charcters.'],
+    maxlength: [20, 'Phone number can not be longer than 20 charcters'],
   },
   email: {
     type: String,
     match: [
       /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/,
-      'Please add a valid e-mail.',
+      'Please add a valid e-mail',
     ],
   },
   address: {
     type: String,
-    required: [true, 'Please add an address.'],
+    required: [true, 'Please add an address'],
   },
   location: {
     type: {
@@ -67,8 +68,8 @@ const BootcampSchema = new mongoose.Schema({
   },
   averageRating: {
     type: Number,
-    min: [1, 'Rating must be at least 1.'],
-    max: [10, 'Rating can not be more than 10.'],
+    min: [1, 'Rating must be at least 1'],
+    max: [10, 'Rating can not be more than 10'],
   },
   averageCost: Number,
   photo: {
@@ -96,5 +97,12 @@ const BootcampSchema = new mongoose.Schema({
     default: Date.now,
   },
 });
+
+// Slugify Middleware
+// Create Bootcamp slug from the name;
+BootcampSchema.pre('save', function (next) {
+  this.slug = slugify(this.name, { lower: true, replacement: '_' });
+  next();
+}); // pre => operasyonlardan önce çalışacak(controller operations)
 
 module.exports = mongoose.model('Bootcamp', BootcampSchema);

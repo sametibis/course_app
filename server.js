@@ -1,7 +1,9 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
+
 // Load env
 dotenv.config({ path: './config/config.env' });
 
@@ -16,13 +18,15 @@ const app = express();
 // Body Parser
 app.use(express.json());
 
-// Dev logging middleware
+// Dev logging middleware:
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
-}
+} // GET /api/v1/bootcamps/5f6f4c18dc7fa92f8065b5a4 200 173.405 ms - 590
 
 // Routers
 app.use('/api/v1/bootcamps', bootcamps);
+
+app.use(errorHandler);
 
 const PORT = process.env.PORT || 5000;
 
