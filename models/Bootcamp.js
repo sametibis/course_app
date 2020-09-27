@@ -108,21 +108,20 @@ BootcampSchema.pre('save', function (next) {
 // pre('save', ...); kaydetmeden önce çalışacak
 
 // GeoCode location fields:
-BootcampSchema.pre('save', async function (next) {
+BootcampSchema.pre('save', async function(next) {
   const loc = await geocoder.geocode(this.address);
   this.location = {
-    type: 'Point ',
+    type: 'Point',
     coordinates: [loc[0].longitude, loc[0].latitude],
     formattedAddress: loc[0].formattedAddress,
-    street: loc[0].steetName,
+    street: loc[0].streetName,
     city: loc[0].city,
     state: loc[0].stateCode,
     zipcode: loc[0].zipcode,
-    country: loc[0].countryCode,
+    country: loc[0].countryCode
   };
 
-  this.address = undefined
-
+  this.address = undefined;
   next();
 });
 
