@@ -1,6 +1,8 @@
 const express = require('express');
 const dotenv = require('dotenv');
 const morgan = require('morgan');
+const path = require('path');
+const fileUpload = require('express-fileupload');
 const errorHandler = require('./middleware/error');
 const connectDB = require('./config/db');
 
@@ -24,6 +26,12 @@ app.use(express.json());
 if (process.env.NODE_ENV === 'development') {
   app.use(morgan('dev'));
 } // GET /api/v1/bootcamps/5f6f4c18dc7fa92f8065b5a4 200 173.405 ms - 590
+
+// File Upload Middleware
+app.use(fileUpload());
+
+// Set static folder
+app.use(express.static(path.join(__dirname, 'public')))
 
 // Routers
 app.use('/api/v1/bootcamps', bootcamps);
