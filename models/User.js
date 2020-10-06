@@ -35,8 +35,6 @@ const UserSchema = new mongoose.Schema({
   },
 });
 
-// MIDDLEWARES
-
 // Encrypt password using bcryptjs
 UserSchema.pre('save', async function (next) {
   const salt = await bcrypt.genSalt(10);
@@ -45,11 +43,16 @@ UserSchema.pre('save', async function (next) {
   next();
 });
 
-// JWT
+// JWT method for this model
 UserSchema.methods.getSignedJwtToken = function () {
   return jwt.sign({ id: this._id }, process.env.JWT_SECRET, {
     expiresIn: process.env.JWT_EXPIRE,
   });
+};
+
+// Match user passwords
+UserSchema.methods.matchPassword = async function (enteredPassword) {
+  return await bcrypt.compare(enteredPassword, this.password);
 };
 
 module.exports = mongoose.model('User', UserSchema);
