@@ -98,14 +98,17 @@ const BootcampSchema = new mongoose.Schema(
       type: Date,
       default: Date.now,
     },
+    user: {
+      type: mongoose.Schema.ObjectId,
+      ref: 'User',
+      required: true,
+    },
   },
   {
     toJSON: { virtuals: true },
     toObject: { virtuals: true },
   }
 );
-
-
 
 /*--  Bootcamp controller'daki işleler gerçekleşmeden buradaki middleware'lar çalışacak, sonra controller'daki işlemler devam edecek. Çünkü burada, Bootcamp model ile ilgili middleware'ler oluşturduk.  --*/
 
