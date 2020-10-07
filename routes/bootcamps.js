@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { protect } = require('../middleware/auth');
+const { protect, authorize } = require('../middleware/auth');
 
 // Bring methods in the Controller
 const {
@@ -26,12 +26,12 @@ router.get('/', advencedResults(Bootcamp, 'courses'), getBootcamps);
 
 router.get('/:id', getBootcamp);
 
-router.post('/', protect, createBootcamp);
+router.post('/', protect, authorize('publisher', 'admin'), createBootcamp);
 
-router.put('/:id', protect, updateBootcamp);
+router.put('/:id', protect, authorize('publisher', 'admin'), updateBootcamp);
 
-router.delete('/:id', protect, deleteBootcamp);
+router.delete('/:id', protect, authorize('publisher', 'admin'),  deleteBootcamp);
 
-router.put('/:id/photo', protect, bootcampPhotoUpload);
+router.put('/:id/photo', protect, authorize('publisher', 'admin'), bootcampPhotoUpload);
 
 module.exports = router;
